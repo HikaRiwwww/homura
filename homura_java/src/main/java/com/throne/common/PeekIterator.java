@@ -69,6 +69,7 @@ public class PeekIterator<T> implements Iterator<T> {
             } else {
                 if (this._endToken != null) {
                     this.outCache.add(this._endToken);
+                    this._endToken = null;
                 }
                 this.endFlag = true;
             }
