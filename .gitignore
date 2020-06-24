@@ -1,0 +1,17 @@
+/.idea/
+*.iml
+*.class
+/.vscode/
+# Default ignored files
+/shelf/
+/workspace.xml
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+/homura_java/.idea/.gitignore
+/homura_java/.idea/compiler.xml
+/homura_java/.idea/jarRepositories.xml
+/homura_java/.idea/misc.xml
+/homura_java/.idea/vcs.xml
