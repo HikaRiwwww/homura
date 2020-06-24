@@ -1,4 +1,5 @@
 /.idea/
+/homura_java/target/
 *.iml
 *.class
 /.vscode/
