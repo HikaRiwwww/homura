@@ -57,6 +57,10 @@ public class PeekIterator<T> implements Iterator<T> {
         return this.outCache.poll();
     }
 
+    public void putBack(T e) {
+        this.outCache.addFirst(e);
+    }
+
     /**
      * 将流中的元素或_endToken取出并放入缓存中，直到缓存填满或流中没有元素为止
      * 核心方法，对流和_endToken的操作都先经过缓存同步后，集中成为对缓存的操作，

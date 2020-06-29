@@ -49,6 +49,9 @@ public class PeekIteratorTests {
         Assertions.assertEquals('f', peekIterator.peek());
         Assertions.assertEquals('f', peekIterator.next());
         Assertions.assertEquals('g', peekIterator.peek());
+        Character n = peekIterator.next();
+        peekIterator.putBack(n);
+        Assertions.assertEquals('g', peekIterator.peek());
         Assertions.assertEquals('g', peekIterator.next());
         Assertions.assertEquals(Boolean.TRUE, peekIterator.hasNext());
         Assertions.assertEquals('0', peekIterator.peek());

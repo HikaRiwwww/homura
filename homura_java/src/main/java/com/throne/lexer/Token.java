@@ -1,8 +1,8 @@
 package com.throne.lexer;
 
-import com.throne.common.AlphabetHelper;
 import com.throne.common.KeyWords;
 import com.throne.common.PeekIterator;
+import com.throne.common.SymbolHelper;
 
 public class Token {
     private TokenType _tokenType;
@@ -25,7 +25,7 @@ public class Token {
         StringBuilder stringBuilder = new StringBuilder();
         while (peekIterator.hasNext()) {
             Character peek = peekIterator.peek();
-            if (AlphabetHelper.isLiteral(peek)) {
+            if (SymbolHelper.isLiteral(peek)) {
                 stringBuilder.append(peek);
                 peekIterator.next();
             } else {
@@ -116,42 +116,43 @@ public class Token {
                     else if (peek == '/'){
                         status = 4;
                         break;
-                    }
-                    else if (peek == '='){
+                    } else if (peek == '=') {
                         status = 5;
+                        break;
+                    } else if (peek == '^') {
+                        status = 6;
+                        break;
+                    } else if (peek == ',') {
+                        status = 7;
                         break;
                     }
                     peekIterator.next();
-                case 1: // '+'
-                    if (AlphabetHelper.isOperator(peek)){
-                        if (peek == '+' || peek == '='){
-                            return new Token(TokenType.OPERATOR, s.append(peek).toString());
-                        }else {
-                            throw new LexicalException("Can not resolve operator \" " + s.append(peek).toString() + "\".");
-                        }
-                    }return new Token(TokenType.OPERATOR, s.toString());
-
-                case 2: // '-'
-                    if (AlphabetHelper.isOperator(peek)){
-                        if (peek == '-' || peek == '='){
-                            return new Token(TokenType.OPERATOR, s.append(peek).toString());
-                        }else {
-                            throw new LexicalException("Can not resolve operator \" " + s.append(peek).toString() + "\".");
-                        }
-                    }return new Token(TokenType.OPERATOR, s.toString());
-
-                case 3: // '*'
-
-                case 4: // '/'
-
-                case 5: // '='
-                    if (AlphabetHelper.isOperator(peek)){
-                        if (peek == '='){
-                            return new Token(TokenType.OPERATOR, s.append(peek).toString());
-                        }else {
-                            throw new LexicalException("Can not resolve operator \" " + s.append(peek).toString() + "\".");
-                        }
-                    }return new Token(TokenType.OPERATOR, s.toString());
+                case 1: // '+' => "++" "+="
+                    if (peek == '+' || peek == '=') {
+                        peekIterator.next();
+                        return new Token(TokenType.OPERATOR, s.append(peek).toString());
+                    } else {
+                        return new Token(TokenType.OPERATOR, s.toString());
+                    }
+                case 2: // '-' => "-+" "-="
+                    if (peek == '-' || peek == '=') {
+                        peekIterator.next();
+                        return new Token(TokenType.OPERATOR, s.append(peek).toString());
+                    } else {
+                        return new Token(TokenType.OPERATOR, s.toString());
+                    }
+                case 3: // '*' => "*="
+                case 4: // '/' => "/="
+                case 5: // '=' => "=="
+                    if (peek == '=') {
+                        peekIterator.next();
+                        return new Token(TokenType.OPERATOR, s.append(peek).toString());
+                    } else {
+                        return new Token(TokenType.OPERATOR, s.toString());
+                    }
+                case 6: // '^'
+                case 7: // ','
+                    return new Token(TokenType.OPERATOR, s.toString());
             }
             s.append(peek);
             peekIterator.next();
@@ -166,39 +167,38 @@ public class Token {
             Character peek = peekIterator.peek();
             switch (status){
                 case 0:
-                    if (peek == '+' || peek =='-'){
+                    if (peek == '+' || peek == '-') {
                         status = 1;
 
-                    } else if (AlphabetHelper.isNumber(peek)) {
+                    } else if (SymbolHelper.isNumber(peek)) {
                         status = 2;
-                    } else if (peek == '.'){
+                    } else if (peek == '.') {
                         status = 4;
-                    }
-                    else {
+                    } else {
                         throw new LexicalException("Can Not resolve A Number Starts With \"" + peek + "\"");
                     }
                     break;
                 case 1: // 以+或-开头
-                    if (AlphabetHelper.isNumber(peek)){
-                    }else if (peek == '.'){
+                    if (SymbolHelper.isNumber(peek)) {
+                    } else if (peek == '.') {
                         status = 3;
-                    }else {
+                    } else {
                         return new Token(TokenType.INTEGER, s.toString());
                     }
                     break;
                 case 2: // 以0-9开头
-                    if (AlphabetHelper.isNumber(peek)){
+                    if (SymbolHelper.isNumber(peek)) {
                         status = 2;
-                    }else if (peek == '.'){
+                    } else if (peek == '.') {
                         status = 3;
-                    }else {
+                    } else {
                         return new Token(TokenType.INTEGER, s.toString());
                     }
                     break;
                 case 3: // float
-                    if (AlphabetHelper.isNumber(peek)){
+                    if (SymbolHelper.isNumber(peek)) {
                         status = 3;
-                    }else {
+                    } else {
                         return new Token(TokenType.FLOAT, s.toString().replace("+", ""));
                     }
                     break;
@@ -257,5 +257,9 @@ public class Token {
                 this._tokenType == TokenType.FLOAT ||
                 this._tokenType == TokenType.STRING ||
                 this._tokenType == TokenType.INTEGER;
+    }
+
+    public boolean isNumber() {
+        return this._tokenType == TokenType.FLOAT || this._tokenType == TokenType.INTEGER;
     }
 }
