@@ -1,4 +1,4 @@
-package com.throne.parser;
+package com.throne.parser.ast;
 
 /**
  * 用以描述函数声明语句的类

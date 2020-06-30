@@ -1,4 +1,4 @@
-package com.throne.parser;
+package com.throne.parser.ast;
 
 /**
  * 用以描述表达式的类
@@ -7,7 +7,7 @@ package com.throne.parser;
  */
 public class Expr extends ASTNode {
 
-    private Expr(ASTNode parent) {
+    public Expr(ASTNode parent) {
         super(parent);
     }
 }

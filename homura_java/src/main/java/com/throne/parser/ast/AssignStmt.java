@@ -1,4 +1,4 @@
-package com.throne.parser;
+package com.throne.parser.ast;
 
 /**
  * 用以描述赋值语句的类

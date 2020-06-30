@@ -1,4 +1,4 @@
-package com.throne.parser;
+package com.throne.parser.ast;
 
 /**
  * 为语法树的各个节点提供相关信息的枚举类型
